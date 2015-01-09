@@ -1,0 +1,20 @@
+#Ignore Maven target folder
+target/
+dependency-reduced-pom.xml
+
+#Ignore Eclipse files
+.settings/
+.classpath
+.project
+
+#Ignore Intellij files
+*.iml
+*.iws
+*.ipr
+.idea/
+
+#Ignore Mac files
+.DS_Store
+
+# Not ready to commit this yet
+javaee/
