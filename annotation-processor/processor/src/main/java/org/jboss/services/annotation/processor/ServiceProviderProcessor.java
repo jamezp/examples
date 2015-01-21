@@ -29,9 +29,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -42,9 +42,10 @@ import java.util.Set;
 import javax.annotation.Generated;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.AnnotatedConstruct;
+import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -52,7 +53,6 @@ import javax.lang.model.util.ElementFilter;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 
-import org.jboss.services.annotation.ServiceProvider;
 import org.jboss.jdeparser.FormatPreferences;
 import org.jboss.jdeparser.JBlock;
 import org.jboss.jdeparser.JBlock.Braces;
@@ -68,18 +68,13 @@ import org.jboss.jdeparser.JSourceFile;
 import org.jboss.jdeparser.JSources;
 import org.jboss.jdeparser.JType;
 import org.jboss.jdeparser.JVarDeclaration;
+import org.jboss.services.annotation.ServiceProvider;
 
 /**
  * @author <a href="mailto:jperkins@redhat.com">James R. Perkins</a>
  */
+@SupportedAnnotationTypes("org.jboss.services.annotation.ServiceProvider")
 public class ServiceProviderProcessor extends AbstractProcessor {
-
-    private static final DateTimeFormatter ISO_8601 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
-
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return Collections.singleton(ServiceProvider.class.getName());
-    }
 
     @Override
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnv) {
@@ -159,7 +154,7 @@ public class ServiceProviderProcessor extends AbstractProcessor {
         return true;
     }
 
-    private TypeElement resolveClass(final AnnotatedConstruct type) {
+    private TypeElement resolveClass(final Element type) {
         final AnnotationMirror mirror = getAnnotation(ServiceProvider.class, type);
         if (mirror != null) {
             final AnnotationValue value = getAnnotationValue(mirror);
@@ -188,7 +183,7 @@ public class ServiceProviderProcessor extends AbstractProcessor {
         // Add the @Generated annotation to the class
         classDef.annotate(Generated.class)
                 .value("value", getClass().getName())
-                .value("date", JExprs.str(ZonedDateTime.now().format(ISO_8601)));
+                .value("date", JExprs.str(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date())));
 
         // Create the types needed
         final JType serviceClassType = _(serviceClassName);

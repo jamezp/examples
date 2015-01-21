@@ -26,7 +26,6 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
-import javax.lang.model.AnnotatedConstruct;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -128,13 +127,13 @@ abstract class AbstractProcessor extends javax.annotation.processing.AbstractPro
      * Gets an annotation, if present, from the type.
      *
      * @param annotation the annotation to retrieve
-     * @param construct  the type the annotation may be present on
+     * @param element    the element the annotation may be present on
      *
      * @return the annotation or {@code null} if the annotation is not present
      */
-    static AnnotationMirror getAnnotation(final Class<? extends Annotation> annotation, final AnnotatedConstruct construct) {
+    static AnnotationMirror getAnnotation(final Class<? extends Annotation> annotation, final Element element) {
         final String name = annotation.getName();
-        for (AnnotationMirror mirror : construct.getAnnotationMirrors()) {
+        for (AnnotationMirror mirror : element.getAnnotationMirrors()) {
             if (mirror.getAnnotationType().toString().equals(name)) {
                 return mirror;
             }

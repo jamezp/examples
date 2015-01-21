@@ -28,7 +28,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>service-example</artifactId>
+    <artifactId>service-org.jboss.services.example</artifactId>
 
     <dependencies>
         <dependency>
@@ -52,7 +52,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.jboss.services.example.Main</mainClass>
+                            <mainClass>org.jboss.services.org.jboss.services.example.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
